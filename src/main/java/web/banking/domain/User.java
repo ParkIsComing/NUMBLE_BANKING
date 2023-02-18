@@ -1,47 +1,36 @@
 package web.banking.domain;
 
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
+@Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name="user")
+@Table(name="`user`")
 public class User {
     @Id
-    @Column(name="id")
+    @Column(name="user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(length = 50, unique = true)
+    @Column(name= "username", length = 50, unique = true)
     private String username;
 
-    @Column(length = 200)
+    @Column(name= "password", length = 100)
     private String password;
 
-    @Column(length = 50)
-    private String roles;
 
-    public List<String> getRoleList(){
-        if(this.roles.length() > 0){
-            return Arrays.asList(this.roles.split(","));
-        }
-        return new ArrayList<>();
-    }
-
-    @Builder
-    public User(String username, String password, String roles){
-        this.username=username;
-        this.password=password;
-        this.roles = roles;
-    }
+    @ManyToMany
+    @JoinTable(
+            name = "user_authority",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
+    private Set<Authority> authorities;
 
 }
