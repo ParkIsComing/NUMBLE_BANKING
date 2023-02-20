@@ -1,12 +1,10 @@
 package web.banking.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class LoginDto {
     private String username;

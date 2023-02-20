@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,12 +34,17 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(){
+        return (web -> web.ignoring()
+                .antMatchers( "/api/authenticate/**","/api/signup/**")) ;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws  Exception{
-        return httpSecurity.httpBasic().disable()
+        return httpSecurity
                 .csrf().disable()
-                .cors().disable()
+//                .cors().disable()
                 .formLogin().disable()
 
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
@@ -53,7 +59,8 @@ public class SecurityConfig {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/authenticate", "/api/signup").permitAll()
+                .antMatchers("/api/authenticate").permitAll()
+                .antMatchers("/api/signup").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
                 .anyRequest().authenticated()
 
