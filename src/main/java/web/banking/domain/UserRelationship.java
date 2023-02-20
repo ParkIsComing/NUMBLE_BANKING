@@ -1,26 +1,35 @@
 package web.banking.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Table(name= "user_relationship")
-@IdClass(UserRelationshipId.class)
 public class UserRelationship { //userFistId must be bigger than userSecondId
-    @Id
-    @Column(name="user_first_id")
-    private Long userFirstId;
 
-    @Id
-    @Column(name = "user_second_id")
-    private Long userSecondId;
+    @EmbeddedId
+    UserRelationshipId userRelationshipId;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @MapsId("userFirstId")
+//    @JoinColumn(name="user_first_id")
+//    @JsonIgnore
+//    private User userFirst;
+//
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name="user_second_id")
+//    @MapsId("userSecondId")
+//    @JsonIgnore
+//    private User userSecond;
 
 }
