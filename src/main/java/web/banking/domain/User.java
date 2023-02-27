@@ -8,10 +8,10 @@ import java.util.Set;
 
 @Entity
 @Getter
-@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name="`user`")
 public class User {
     @Id
